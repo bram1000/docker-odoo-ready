@@ -33,6 +33,11 @@ debug_port = 5678 + (int(args.http_port) - 8069)
 odoo_branch = args.branch
 odoo_path = COMMUNITY / odoo_branch
 
+if "." not in odoo_branch:
+    odoo_branch += ".0"
+if not odoo_branch.endswith(".0") and "saas" not in odoo_branch:
+    odoo_branch = "saas-" + odoo_branch
+
 odoo_release = {}
 odoo_release_file = next(path / "release.py" for path in [odoo_path / "odoo", odoo_path / "openerp"] if path.exists())
 with odoo_release_file.open() as fp:
@@ -60,10 +65,11 @@ if "upgrade" not in paths and odoo_version >= 13.0:
     # Before 13.0, it's a symlink from `upgrade` to `odoo/addons/base/maintenance`
     paths["upgrade"] = [UPGRADE_UTIL / "src", UPGRADE / "migrations"]
 
-if args.database:
-    extra_args.extend(["--database", args.database])
-    if odoo_version < 11.0:
-        extra_args.append(f"--db-filter=^({args.database})$")
+if not args.database:
+    args.database = odoo_branch
+extra_args.extend(["--database", args.database])
+if odoo_version < 11.0:
+    extra_args.append(f"--db-filter=^({args.database})$")
 
 mount_odoo_path = Path("/home/odoo") / odoo_path.relative_to(Path.home())
 
