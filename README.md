@@ -33,8 +33,10 @@ for b in $security_branches; do for r in $security_repositories; do git -C $src/
 src=~/src
 
 # Install requirements
-sudo apt install podman postgresql pipx
+sudo apt install podman postgresql pipx postgresql-*-pgvector
 sudo su - postgres -c "createuser $USER --createdb"
+echo "trusted = true" | sudo tee -a /usr/share/postgresql/*/extension/vector.control
+sudo systemctl reload postgresql
 # newer version of podman-compose than the one provided by Ubuntu distribution, to include
 # https://github.com/containers/podman-compose/pull/916
 pipx install podman-compose==1.2.0
