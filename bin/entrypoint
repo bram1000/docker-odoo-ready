@@ -41,7 +41,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--domain-whitelist",
         help="Comma-separated domains. Restrict internet to HTTP connections to these domains",
-        default="ocn.odoo.com,pad.odoo.com",
+        default="ocn.odoo.com,pad.odoo.com,api.openai.com,generativelanguage.googleapis.com",
     )
     args, extra_args = parser.parse_known_args()
 
