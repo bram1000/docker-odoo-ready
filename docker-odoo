@@ -73,13 +73,6 @@ extra_args.extend(["--database", args.database])
 if odoo_version < 11.0:
     extra_args.append(f"--db-filter=^({args.database})$")
 
-if '--without-demo' in extra_args:
-    if odoo_version >= 18.3:
-        extra_args.remove('--without-demo')
-else:
-    if odoo_version >= 18.3:
-        extra_args.append('--with-demo')
-
 mount_odoo_path = Path("/home/odoo") / odoo_path.relative_to(Path.home())
 
 command = ["podman-compose", "run"]
